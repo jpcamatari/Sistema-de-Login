@@ -1,3 +1,4 @@
+from controller import CadastrarUsuario
 
 print("-----------------Sistema de Login-----------------")
 print("|| 0 - Cadastrar || 1 - Logar ||")
@@ -7,7 +8,8 @@ while True:
     try:
         escolha = int(input('Escolha uma opção: '))
         if escolha == 0:
-            print('Cadastrando')
+            print('Insira seus dados para cadastro:')
+            CadastrarUsuario()
             break
         elif escolha == 1:
             print('Logando')

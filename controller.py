@@ -25,5 +25,4 @@ def CadastrarUsuario():
     session.add(cad)
     session.commit()
 
-CadastrarUsuario()
 
