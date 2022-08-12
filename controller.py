@@ -1,7 +1,9 @@
+import email
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from model import Usuario
+import re
 
 def RetornaSession():
     USUARIO = "root"
@@ -18,11 +20,26 @@ def RetornaSession():
 
 session = RetornaSession()
 
+
 def CadastrarUsuario():
-    cad = Usuario(nome =input("Nome:") , email = input("Email:"), senha = input("Senha:"))
-    print("Você foi Cadastrado com Sucesso! Efetue o login.")
+    cad = Usuario(nome =str(input("Nome:")) , email = CheckEmail(input("Email:")), senha = input("Senha:"))
+    
 
     session.add(cad)
     session.commit()
+
+
+      
+def CheckEmail(valid):  
+    regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
+    
+    while True:
+        if (re.search(regex,valid)):  
+            break 
+            
+        else:  
+            email = input("Email Invalido, Digite um Email Valido:")
+            break 
+
 
 
