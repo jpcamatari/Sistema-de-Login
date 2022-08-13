@@ -1,6 +1,4 @@
-import email
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from model import Usuario
 import re
@@ -19,6 +17,20 @@ def RetornaSession():
     return Session()
 
 session = RetornaSession()
+
+
+class ValidarDados():
+
+    @classmethod
+    def verifica_dados(cls, nome, email, senha):
+        if len(nome) > 50 or len(nome) < 3:
+            return 2
+        if len(email) > 200:
+            return 3
+        if len(senha) > 100 or len(senha) < 6:
+            return 4
+        return 1
+
 
 
 def CadastrarUsuario():
