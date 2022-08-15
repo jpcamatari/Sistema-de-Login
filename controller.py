@@ -1,7 +1,8 @@
+import hashlib
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from model import Usuario
-import re
+
 
 def RetornaSession():
     USUARIO = "root"
@@ -16,11 +17,10 @@ def RetornaSession():
     Session = sessionmaker(bind=engine)
     return Session()
 
-session = RetornaSession()
+#session = RetornaSession()
 
 
-class ValidarDados():
-
+class ControllerCadastro():
     @classmethod
     def verifica_dados(cls, nome, email, senha):
         if len(nome) > 50 or len(nome) < 3:
@@ -29,29 +29,34 @@ class ValidarDados():
             return 3
         if len(senha) > 100 or len(senha) < 6:
             return 4
+       
         return 1
 
 
 
-def CadastrarUsuario():
-    cad = Usuario(nome =str(input("Nome:")) , email = CheckEmail(input("Email:")), senha = input("Senha:"))
-    
+    @classmethod
+    def cadastrar(cls, nome, email, senha):
+        session = RetornaSession()
+        usuario = session.query(Usuario).filter(Usuario.email == email).all()
 
-    session.add(cad)
-    session.commit()
+        if len(usuario) > 0:
+            return 5
 
+        dados_verificados = cls.verifica_dados(nome, email, senha)
 
-      
-def CheckEmail(valid):  
-    regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
-    
-    while True:
-        if (re.search(regex,valid)):  
-            break 
-            
-        else:  
-            email = input("Email Invalido, Digite um Email Valido:")
-            break 
+        if dados_verificados != 1:
+            return dados_verificados
 
 
+        try:
+            senha = hashlib.sha256(senha.encode()).hexdigest()
+            cad = Usuario(nome=nome, email=email, senha=senha)
+            session.add(cad)
+            session.commit()
+            return 1
+        
+        except:
+            return 3
 
+
+print(ControllerCadastro.cadastrar('joao', 'jpcamatari@hotmail.com', 'jp1234'))
