@@ -16,8 +16,8 @@ session = Session()
 Base = declarative_base()
 
 
-class Usuario(Base):
-    __tablename__ = "usuario"
+class Pessoa(Base):
+    __tablename__ = "Pessoa"
     id = Column(Integer, primary_key=True)
     nome = Column(String(50))
     email = Column(String(50))

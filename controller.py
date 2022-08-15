@@ -1,7 +1,7 @@
 import hashlib
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from model import Usuario
+from model import Pessoa
 
 
 def RetornaSession():
@@ -37,7 +37,7 @@ class ControllerCadastro():
     @classmethod
     def cadastrar(cls, nome, email, senha):
         session = RetornaSession()
-        usuario = session.query(Usuario).filter(Usuario.email == email).all()
+        usuario = session.query(Pessoa).filter(Pessoa.email == email).all()
 
         if len(usuario) > 0:
             return 5
@@ -50,13 +50,13 @@ class ControllerCadastro():
 
         try:
             senha = hashlib.sha256(senha.encode()).hexdigest()
-            cad = Usuario(nome=nome, email=email, senha=senha)
-            session.add(cad)
+            p1 = Pessoa(nome=nome, email=email, senha=senha)
+            session.add(p1)
             session.commit()
             return 1
         
-        except:
-            return 3
+        except Exception as e:
+            print(e)
 
 
 print(ControllerCadastro.cadastrar('joao', 'jpcamatari@hotmail.com', 'jp1234'))
