@@ -59,4 +59,14 @@ class ControllerCadastro():
             print(e)
 
 
-print(ControllerCadastro.cadastrar('joao', 'jpcamatari@hotmail.com', 'jp1234'))
+class ControllerLogin():
+    @classmethod
+    def login(cls, email, senha):
+        session = RetornaSession()
+        senha = hashlib.sha256(senha.encode()).hexdigest()
+        logado = session.query(Pessoa).filter(Pessoa.email == email).filter(Pessoa.senha == senha).all()
+        if len(logado) == 1:
+            return {'logado': True, 'id': logado[0].id}
+        else:
+            return False
+
